@@ -1,0 +1,179 @@
+<app-header></app-header>
+
+<div class="age-converter-page">
+  
+  <!-- Hero Section -->
+  <section class="hero-wrapper mb-4 position-relative">
+    <div class="kittens-container mb-0 position-relative text-center z-2">
+      <img src="assets/kitten.png" alt="Cats" class="kittens-image mt-4">
+    </div>
+    
+    <div class="hero-section mx-5 rounded-5 position-relative z-1">
+      <img src="assets/paw1.png" alt="Paw" class="paw-left">
+      
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <div class="hero-short mb-3">AC</div>
+            <h1 class="hero-title">Human-Year Age Converter</h1>
+            <p class="hero-text">
+              Discover your cat's age in human years and learn fun details like their zodiac sign.
+            </p>
+          </div>
+          <div class="col-md-4 text-end">
+            <img src="assets/ac_cat.png" alt="Cat with calendar" class="hero-cat-img">
+          </div>
+        </div>
+      </div>
+      
+      <img src="assets/paw2.png" alt="Paw" class="paw-right">
+    </div>
+  </section>
+
+  <!-- Calculator Section -->
+  <section class="calculator-section mx-5 mb-5">
+    <div class="calculator-container rounded-5 py-5 position-relative">
+      
+      <!-- Left Decorative Image -->
+      <img src="assets/ac_decorcat.png" alt="Sleeping cat" class="decor-left">
+      
+      <!-- Center Form Box -->
+      <div class="form-box rounded-4 p-4">
+        <div class="form-content-wrapper">
+          <div class="badge-header mb-3">AC</div>
+          <h3 class="form-title mb-4">Ever wondered how old your cat really is? Find out in human years!</h3>
+          
+          <form>
+            <!-- Pet's Name -->
+            <div class="mb-4">
+              <label class="form-label">Your Pet's Name</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="e.g., Ivy"
+                [(ngModel)]="petName"
+                name="petName">
+            </div>
+
+            <!-- Gender -->
+            <div class="mb-4">
+              <label class="form-label d-block">Gender</label>
+              <div class="form-check form-check-inline">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="gender" 
+                  id="genderBoy"
+                  value="boy"
+                  [(ngModel)]="gender">
+                <label class="form-check-label" for="genderBoy">Boy</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="gender" 
+                  id="genderGirl"
+                  value="girl"
+                  [(ngModel)]="gender">
+                <label class="form-check-label" for="genderGirl">Girl</label>
+              </div>
+            </div>
+
+            <!-- Input Type Selection -->
+            <div class="mb-3">
+              <label class="form-label d-block">How would you like to enter the age?</label>
+              <div class="form-check form-check-inline">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="inputType" 
+                  id="inputTypeBirthdate"
+                  value="birthdate"
+                  [(ngModel)]="inputType">
+                <label class="form-check-label" for="inputTypeBirthdate">Date of Birth</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="inputType" 
+                  id="inputTypeAge"
+                  value="age"
+                  [(ngModel)]="inputType">
+                <label class="form-check-label" for="inputTypeAge">Age</label>
+              </div>
+            </div>
+
+            <!-- Date of Birth Input -->
+            <div class="mb-4" *ngIf="inputType === 'birthdate'">
+              <label class="form-label">Date of Birth</label>
+              <input 
+                type="date" 
+                class="form-control" 
+                [(ngModel)]="birthdate"
+                name="birthdate">
+            </div>
+
+            <!-- Age Input -->
+            <div class="mb-4" *ngIf="inputType === 'age'">
+              <label class="form-label">Age</label>
+              <div class="row g-2">
+                <div class="col-7">
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    placeholder="Age"
+                    [(ngModel)]="age"
+                    name="age"
+                    min="0"
+                    step="1">
+                </div>
+                <div class="col-5">
+                  <select 
+                    class="form-select" 
+                    [(ngModel)]="ageUnit"
+                    name="ageUnit">
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="row g-2 mb-4">
+              <div class="col-6">
+                <button type="button" class="btn btn-reload w-100" (click)="calculateAge()">
+                  Reload
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="button" class="btn btn-clear w-100" (click)="clearForm()">
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="results-section text-center" *ngIf="showResults">
+              <div class="result-image mb-3">
+                <img [src]="resultImage" alt="Cat graduate" class="img-fluid rounded">
+              </div>
+              <p class="result-text">
+                {{ resultText }}
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Right Decorative Image -->
+      <img src="assets/ac_decorcat2.png" alt="Sleeping cat" class="decor-right">
+      
+    </div>
+  </section>
+
+</div>
+
+<app-footer></app-footer>

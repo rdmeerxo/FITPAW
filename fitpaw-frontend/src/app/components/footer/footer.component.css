@@ -1,0 +1,9 @@
+.footer-text {
+    color: gray;
+}
+
+@media (max-width: 932px) {
+    .footer-text {
+        font-size: 12px;
+    }
+}

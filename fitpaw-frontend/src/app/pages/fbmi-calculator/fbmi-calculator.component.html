@@ -1,0 +1,149 @@
+<app-header></app-header>
+
+<div class="fbmi-page">
+  
+  <section class="hero-wrapper mb-4 position-relative">
+    <div class="kittens-container mb-0 position-relative text-center z-2">
+      <img src="assets/kitten.png" alt="Cats" class="kittens-image mt-4">
+    </div>
+    
+    <div class="hero-section mx-5 rounded-5 position-relative z-1">
+      <img src="assets/paw1.png" alt="Paw" class="paw-left">
+      
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <div class="hero-short mb-3">FBMI</div>
+            <h1 class="hero-title">Feline Body Assessment</h1>
+            <p class="hero-text fw-light">
+              Check your cat's weight and see if it's in a healthy range.
+            </p>
+          </div>
+          <div class="col-md-4 text-end">
+            <img src="assets/fbmi_cat.png" alt="Cat on scale" class="hero-cat-img">
+          </div>
+        </div>
+      </div>
+      
+      <img src="assets/paw2.png" alt="Paw" class="paw-right">
+    </div>
+  </section>
+
+  <section class="calculator-section mx-5 mb-5">
+    <div class="calculator-container rounded-5 p-5">
+      <div class="row g-4">
+        
+        <!--1-->
+        <div class="col-md-4">
+          <div class="step-box rounded-4 p-4 h-100">
+            <h3 class="step-title">Step 1:</h3>
+            <p class="step-description">
+              Measure your cats rib cage circumference and leg index length.
+            </p>
+            <div class="step-image text-center mt-4">
+              <img src="assets/Measure.png" alt="Cat measurement guide" class="img-fluid">
+            </div>
+          </div>
+        </div>
+
+        <!--2-->
+        <div class="col-md-4">
+          <div class="step-box rounded-4 p-4 h-100">
+            <h3 class="step-title">Step 2:</h3>
+            <p class="step-description">Enter the measurements in cm.</p>
+            
+            <form>
+                <div class="mb-3">
+                <label class="form-label">Rib cage circumference</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  placeholder="cm"
+                  [(ngModel)]="ribCageCircumference"
+                  name="ribCageCircumference"
+                  (input)="calculateFBMI()">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Lenght of the lower back leg</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  placeholder="cm"
+                  [(ngModel)]="legLength"
+                  name="legLength"
+                  (input)="calculateFBMI()">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">FBMI</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [value]="fbmiResult"
+                  readonly>
+              </div>
+
+              <div class="row g-2">
+                <div class="col-6">
+                  <button type="button" class="btn btn-clear w-100" (click)="clearForm()">
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!--3-->
+        <div class="col-md-4">
+          <div class="step-box rounded-4 p-4 h-100">
+            <h3 class="step-title">Step 3:</h3>
+            <p class="step-description">Check your purry friend's result!</p>
+            
+            <div class="results-grid mt-4">
+              <div class="row g-3">
+
+                <div class="col-6">
+                  <div class="result-card" [class.active]="category === 'underweight'">
+                    <img src="assets/underweight.png" alt="Underweight cat" class="img-fluid mb-2">
+                    <div class="result-label">&lt;15</div>
+                    <div class="result-category">UNDERWEIGHT</div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="result-card" [class.active]="category === 'normal'">
+                    <img src="assets/normal.png" alt="Normal weight cat" class="img-fluid mb-2">
+                    <div class="result-label">15-29.9</div>
+                    <div class="result-category">NORMAL WEIGHT</div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="result-card" [class.active]="category === 'overweight'">
+                    <img src="assets/overweight.png" alt="Overweight cat" class="img-fluid mb-2">
+                    <div class="result-label">30-42</div>
+                    <div class="result-category">OVERWEIGHT</div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="result-card" [class.active]="category === 'obese'">
+                    <img src="assets/obese.png" alt="Obese cat" class="img-fluid mb-2">
+                    <div class="result-label">42&gt;</div>
+                    <div class="result-category">OBESE</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,184 @@
+<app-header></app-header>
+
+<div class="calorie-page">
+  
+  <!-- Hero Section -->
+  <section class="hero-wrapper mb-4 position-relative">
+    <div class="kittens-container mb-0 position-relative text-center z-2">
+      <img src="assets/kitten.png" alt="Cats" class="kittens-image mt-4">
+    </div>
+    
+    <div class="hero-section mx-5 rounded-5 position-relative z-1">
+      <img src="assets/paw1.png" alt="Paw" class="paw-left">
+      
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <div class="hero-short mb-3">CNC</div>
+            <h1 class="hero-title">Cat Nutrition Calculator</h1>
+            <p class="hero-text">
+              Find out the appropriate daily calorie intake for your cat based on its weight and health goals.
+            </p>
+          </div>
+          <div class="col-md-4 text-end">
+            <img src="assets/cic_cat.png" alt="Cat on scale" class="hero-cat-img">
+          </div>
+        </div>
+      </div>
+      
+      <img src="assets/paw2.png" alt="Paw" class="paw-right">
+    </div>
+  </section>
+
+  <!-- Calculator Section -->
+  <section class="calculator-section mx-5 mb-5">
+    <div class="calculator-container rounded-5 py-4 position-relative">
+      
+      <!-- Left Decorative Image -->
+      <img src="assets/calorieDecor1.png" alt="Sleeping cat" class="decor-left">
+      
+      <!-- Center Form Box -->
+       <div class="form-box rounded-4 p-4">
+        <div class="form-content-wrapper">
+            <h3 class="form-title mb-2">RER:</h3>
+            <h4 class="form-subtitle mb-4">Calorie needed / day:</h4>
+            
+            <form>
+                <!-- Weight -->
+                <div class="mb-4">
+                    <label class="form-label">Weight</label>
+                    <input 
+                    type="number" 
+                    class="form-control" 
+                    placeholder="kg"
+                    [(ngModel)]="weight"
+                    name="weight"
+                    min="0"
+                    step="0.1">
+                </div>
+
+                <!-- Neuter -->
+                <div class="mb-4">
+                    <label class="form-label d-block">Neuter</label>
+                    <div class="form-check form-check-inline">
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="neuter" 
+                        id="neuterYes"
+                        [value]="true"
+                        [(ngModel)]="isNeutered">
+                    <label class="form-check-label" for="neuterYes">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="neuter" 
+                        id="neuterNo"
+                        [value]="false"
+                        [(ngModel)]="isNeutered">
+                    <label class="form-check-label" for="neuterNo">No</label>
+                    </div>
+                </div>
+
+                <!-- Age -->
+                <div class="mb-4">
+                    <label class="form-label">Age</label>
+                    <div class="row g-2">
+                    <div class="col-7">
+                        <input 
+                        type="number" 
+                        class="form-control" 
+                        placeholder="Age"
+                        [(ngModel)]="age"
+                        name="age"
+                        min="0"
+                        step="1">
+                    </div>
+                    <div class="col-5">
+                        <select 
+                        class="form-select" 
+                        [(ngModel)]="ageUnit"
+                        name="ageUnit">
+                        <option value="months">Months</option>
+                        <option value="years">Years</option>
+                        </select>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Weight Goal -->
+                <div class="mb-4">
+                    <label class="form-label d-block">Weight Goal</label>
+                    <div class="form-check form-check-inline">
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="weightGoal" 
+                        id="weightLoss"
+                        value="loss"
+                        [(ngModel)]="weightGoal">
+                    <label class="form-check-label" for="weightLoss">Weight loss</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="weightGoal" 
+                        id="weightGain"
+                        value="gain"
+                        [(ngModel)]="weightGoal">
+                    <label class="form-check-label" for="weightGain">Weight gain</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="weightGoal" 
+                        id="weightNA"
+                        value="na"
+                        [(ngModel)]="weightGoal">
+                    <label class="form-check-label" for="weightNA">N/A</label>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="row g-2 mb-4">
+                    <div class="col-6">
+                    <button type="button" class="btn btn-reload w-100" (click)="calculateCalories()">
+                        Reload
+                    </button>
+                    </div>
+                    <div class="col-6">
+                    <button type="button" class="btn btn-clear w-100" (click)="clearForm()">
+                        Clear
+                    </button>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="results-section" *ngIf="showResults">
+                    <div class="result-item">
+                        <strong>Total calorie needed for a day:</strong> {{ totalCalories }} kcal
+                    </div>
+                    <div class="result-item" [class.highlighted]="weightGoal === 'loss'">
+                        <span [class.fw-bold]="weightGoal === 'loss'">Weight loss:</span> {{ weightLossCalories }} kcal
+                    </div>
+                    <div class="result-item" [class.highlighted]="weightGoal === 'gain'">
+                        <span [class.fw-bold]="weightGoal === 'gain'">Weight gain:</span> {{ weightGainCalories }} kcal
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+      
+      <!-- Right Decorative Image -->
+      <img src="assets/calorieDecor2.png" alt="Sleeping cat" class="decor-right">
+      
+    </div>
+  </section>
+
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,76 @@
+<nav class="navbar navbar-light py-4 px-4 mx-3">
+  <div class="container-fluid">
+
+    <a class="navbar-logo d-flex align-items-center" routerLink="/">
+      <img src="assets/logo.png" alt="FitPaw Logo" height="60px" class="me-2">
+      <span class="fw-bold fs-3 mt-3">FitPaw</span>
+    </a>
+    
+    <div class="nav-buttons d-flex gap-3">
+      <button 
+        class="btn btn-nav" 
+        routerLink="/fbmi" 
+        routerLinkActive="active">
+        Body Assessment
+      </button>
+      <button 
+        class="btn btn-nav" 
+        routerLink="/calorie" 
+        routerLinkActive="active">
+        Cat Nutrition
+      </button>
+      <button
+        class="btn btn-nav"
+        routerLink="/food-intake"
+        routerLinkActive="active">
+        Food Intake
+      </button>
+      <button 
+        class="btn btn-nav" 
+        routerLink="/age-converter" 
+        routerLinkActive="active">
+        Human-Year Age
+      </button>
+    </div>
+
+    <button class="hamburger-btn" (click)="toggleMenu()">
+      <i class="bi bi-list"></i>
+    </button>
+  </div>
+</nav>
+
+<!--adding mobile menu-->
+<div class="mobile-menu-overlay" [class.active]="isMenuOpen" (click)="toggleMenu()"></div>
+
+<div class="mobile-menu" [class.active]="isMenuOpen">
+  <button class="close-btn" (click)="toggleMenu()">
+    <i class="bi bi-x-lg"></i>
+  </button>
+  
+  <div class="mobile-nav-buttons">
+    <button 
+      class="btn btn-nav-mobile" 
+      routerLink="/fbmi" 
+      (click)="toggleMenu()">
+      Body Assessment
+    </button>
+    <button 
+      class="btn btn-nav-mobile" 
+      routerLink="/calorie" 
+      (click)="toggleMenu()">
+      Cat Nutrition
+    </button>
+    <button
+      class="btn btn-nav-mobile"
+      routerLink="/food-intake"
+      (click)="toggleMenu()">
+      Food Intake
+    </button>
+    <button 
+      class="btn btn-nav-mobile" 
+      routerLink="/age-converter" 
+      (click)="toggleMenu()">
+      Human-Year Age
+    </button>
+  </div>
+</div>

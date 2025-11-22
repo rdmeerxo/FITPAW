@@ -1,0 +1,134 @@
+<app-header></app-header>
+
+<div class="landing-page">
+  
+  <section class="hero-wrapper mb-3 position-relative">
+    <div class="kittens-container mb-0 position-relative text-center z-2">
+      <img src="assets/kitten.png" alt="Cats" class="kittens-image mt-4">
+    </div>
+    
+    <div class="hero-section mx-5 rounded-5 position-relative z-1">
+      <img src="assets/paw1.png" alt="Paw" class="paw-left">
+
+      <div class="container d-flex justify-content-center align-items-center">
+        <div class="hero-content">
+          <h1 class="hero-title">Helping cats live healthier, longer lives!</h1>
+          <p class="hero-text">
+            At FitPaw, we are dedicated to help you to ensure your cat's health and well-being with the power of technology. 
+            Our tools provide accurate, data-driven insights to help you make informed decisions about your cat's nutrition, 
+            weight, and overall health.
+          </p>
+        </div>
+        
+      </div>
+
+      <img src="assets/paw2.png" alt="Paw" class="paw-right">
+    </div>
+  </section>
+
+  <!--Calc card containers -->
+  <section class="calculators-section mt-5 mx-0 d-flex">
+    <div class="container">
+      <div class="row g-4">
+        
+        <!-- FBMI -->
+        <div class="col-md-6 col-lg-3">
+          <div class="calculator-card card-fbmi">
+
+            <div class="card-row-1">
+              <h3 class="card-title">Feline Body Assessment</h3>
+              <div class="card-short">FBMI</div>
+            </div>
+
+            <div class="card-row-2">
+              <p class="card-description">
+                Check your cat's weight (BMI) and see if it's in a healthy range.
+              </p>
+              <div class="card-image-section">
+                <img src="assets/fbmi_cat.png" alt="Cat on scale" class="cat-img">
+              </div>
+            </div>
+
+            <button class="btn btn-calculator" routerLink="/fbmi">Open calculator</button>
+          </div>
+        </div>
+
+        <!-- CIC -->
+        <div class="col-md-6 col-lg-3">
+          <div class="calculator-card card-nutrition">
+
+            <div class="card-row-1">
+              <h3 class="card-title">Cat Nutrition Calculator</h3>
+              <div class="card-short">CNC</div>
+            </div>
+
+            <div class="card-row-2">
+              <p class="card-description">
+                Find out the appropriately daily calorie intake for your cat based on its weight and health goals.
+              <div class="card-image-section">
+                <img src="assets/cic_cat.png" alt="Cat on scale" class="cat-img">
+              </div>
+            </div>
+
+            <button class="btn btn-calculator" routerLink="/calorie">Open calculator</button>
+          </div>
+        </div>
+
+        <!-- FIC -->
+        <div class="col-md-6 col-lg-3">
+          <div class="calculator-card card-food">
+
+            <div class="card-row-1">
+              <h3 class="card-title">Food Intake Calculator</h3>
+              <div class="card-short">FIC</div>
+            </div>
+
+            <div class="card-row-2">
+              <p class="card-description">
+                Get personalized feeding amounts based on calories, food types, and meal frequency.
+              <div class="card-image-section">
+                <img src="assets/fic_cat1.png" alt="Cat on scale" class="cat-img">
+              </div>
+            </div>
+
+            <button class="btn btn-calculator" routerLink="/food-intake">Open calculator</button>
+          </div>
+        </div>
+
+        <!-- AC -->
+        <div class="col-md-6 col-lg-3">
+          <div class="calculator-card card-age">
+
+            <div class="card-row-1">
+              <h3 class="card-title">Human-Year Age Converter</h3>
+              <div class="card-short">AC</div>
+            </div>
+
+            <div class="card-row-2">
+              <p class="card-description">
+                Convert your cat's age to its equivalent in human years to better understand its life stage.
+              <div class="card-image-section">
+                <img src="assets/ac_cat.png" alt="Cat on scale" class="cat-img">
+              </div>
+            </div>
+
+            <button class="btn btn-calculator" routerLink="/food-intake">Open calculator</button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </section>
+
+  <section class="coming-soon-section py-4 mt-4">
+    <div class="container">
+      <p class="coming-soon-text text-center">
+        Stay tuned! More features are coming soon to help you better manage your cat's health and well-being!
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,281 @@
+.landing-page {
+  min-height: calc(100vh - 200px);
+}
+
+.kittens-image {
+  width: 50%;
+  height: auto;
+}
+
+.hero-section {
+  background-color: #51675F;
+  background-image: url('/assets/background_pattern.png');
+  background-size: cover;
+  background-position: center;
+  padding: 80px 50px;
+  
+}
+
+.paw-left {
+  position: absolute;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 200px;
+  width: auto;
+}
+
+.paw-right {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 200px;
+  width: auto;
+}
+
+
+.hero-content {
+  text-align: center;
+  flex: 1;
+  padding: 0 100px;
+}
+
+.hero-title {
+  font-family: 'Mali', cursive;
+  color: #FDA150;
+  font-size: 45px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  line-height: 1.2;
+}
+
+.hero-text {
+  color: white;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 100;
+}
+
+/*------CARDS--------*/
+.calculator-card {
+  border-radius: 25px;
+  padding: 30px 25px;
+  height: 100%;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.calculator-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+.card-fbmi {
+  background-color: #546A62;
+}
+
+.card-nutrition {
+  background-color: #ABB1AB;
+}
+
+.card-food {
+  background-color: #A0522D;
+}
+
+.card-age {
+  background-color: #FDA150;
+}
+
+.card-row-1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.card-title {
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  flex: 1;
+}
+
+.card-short {
+  background-color: #2C3E50;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.card-row-2 {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.card-description {
+  color: white;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+
+.card-image-section {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cat-img {
+  max-width: 120px;
+  height: auto;
+}
+
+.btn-calculator {
+  background-color: white;
+  color: #333;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-calculator:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+
+.coming-soon-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+}
+
+@media (max-width: 932px) {
+  .landing-page {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .hero-wrapper {
+    width: 90%;
+    margin: 0 auto !important;
+  }
+  
+  .kittens-image {
+    width: 85%;
+    height: auto;
+  }
+  
+  .hero-section {
+    margin: 0 !important;
+    padding: 30px 10px 90px 10px; 
+    position: relative;
+  }
+  
+  .hero-title {
+    font-size: 36px;
+  }
+  
+  .hero-text {
+    font-size: 14px;
+  }
+  
+  .hero-content {
+    padding: 0 20px;
+    text-align: center;
+  }
+  
+  .paw-left {
+    display: none;
+  }
+  
+  .paw-right {
+    display: block;
+    position: absolute;
+    bottom: -65px;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+    height: 250px !important;
+    width: auto;
+    top: auto;
+  }
+  
+  .calculators-section {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .calculator-card {
+    min-height: 250px;
+  }
+  
+  .card-title {
+    font-size: 20px;
+  }
+  
+  .card-description {
+    font-size: 14px !important;
+  }
+
+  .btn-calculator {
+    padding: 8px !important;
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .card-image-section {
+    padding-top: 0px
+  }
+
+
+  .coming-soon-section {
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+  .coming-soon-text {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 28px;
+  }
+  
+  .hero-text {
+    font-size: 14px;
+  }
+  
+  .paw-right {
+    height: 100px;
+  }
+  
+  .card-title {
+    font-size: 18px;
+  }
+  
+  .card-description {
+    font-size: 12px;
+  }
+
+ 
+}

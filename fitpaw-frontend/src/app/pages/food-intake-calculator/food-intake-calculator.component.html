@@ -1,0 +1,242 @@
+<app-header></app-header>
+
+<div class="food-intake-page">
+  
+  <section class="hero-wrapper mb-4 position-relative">
+    <div class="kittens-container mb-0 position-relative text-center z-2">
+      <img src="assets/kitten.png" alt="Cats" class="kittens-image mt-4">
+    </div>
+    
+    <div class="hero-section mx-5 rounded-5 position-relative z-1">
+      <img src="assets/paw1.png" alt="Paw" class="paw-left">
+      
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <div class="hero-short mb-3">FIC</div>
+            <h1 class="hero-title">Food Intake Calculator</h1>
+            <p class="hero-text">
+              Get personalized feeding amounts based on calories, food types, and meal frequency.
+            </p>
+          </div>
+          <div class="col-md-4 text-end">
+            <img src="assets/cic_cat.png" alt="Cat with food" class="hero-cat-img">
+          </div>
+        </div>
+      </div>
+      
+      <img src="assets/paw2.png" alt="Paw" class="paw-right">
+    </div>
+  </section>
+
+  <!--calcularot-->
+  <section class="calculator-section mx-5 mb-5">
+    <div class="calculator-container rounded-5 p-5">
+      <div class="row g-4">
+        
+        <!--1-->
+        <div class="col-md-4">
+          <div class="step-box rounded-4 p-4 h-100">
+            <h3 class="step-title">Step 1:</h3>
+            <p class="step-description">
+              Enter RER and your cat's food details. Type in the calories per 100g for each food or scan the barcode to fill it automatically.
+            </p>
+            
+            <form>
+              <!--rer-->
+              <div class="mb-3">
+                <label class="form-label">RER</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  placeholder="kcal/day"
+                  [(ngModel)]="rer"
+                  name="rer"
+                  min="0">
+                <small class="form-text">Calories per day</small>
+              </div>
+
+              <!--foods -->
+              <div *ngFor="let food of foods; let i = index" class="food-entry mb-3">
+                <label class="form-label">Food {{ i + 1 }}</label>
+                <div class="row g-2 mb-2">
+                  <div class="col-7">
+                    <input 
+                      type="text" 
+                      class="form-control form-control-sm" 
+                      placeholder="Name"
+                      [(ngModel)]="food.name"
+                      [name]="'foodName' + i">
+                  </div>
+                  <div class="col-5">
+                    <input 
+                      type="number" 
+                      class="form-control form-control-sm" 
+                      placeholder="kcal/100g"
+                      [(ngModel)]="food.caloriesPer100g"
+                      [name]="'foodCal' + i"
+                      min="0">
+                  </div>
+                </div>
+                <button 
+                  type="button" 
+                  class="btn btn-scan btn-sm w-100 mb-2"
+                  (click)="scanBarcode(i)">
+                  <i class="bi bi-upc-scan me-1"></i> Scan Barcode
+                </button>
+                <button 
+                  *ngIf="foods.length > 1"
+                  type="button" 
+                  class="btn btn-remove btn-sm w-100"
+                  (click)="removeFood(i)">
+                  Remove
+                </button>
+              </div>
+
+              <!--add button -->
+              <button 
+                type="button" 
+                class="btn btn-add w-100"
+                (click)="addFood()">
+                <i class="bi bi-plus-circle me-1"></i> Add Food
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!--2 -->
+        <div class="col-md-4">
+          <div class="step-box rounded-4 p-4 h-100">
+            <h3 class="step-title">Step 2:</h3>
+            <p class="step-description">
+              Set food ratio and meals per day. If you added multiple foods, adjust how you want to split them (ex: 40%, 60%) and choose how many meals you feed daily.
+            </p>
+            
+            <form>
+              <!--foodshare-->
+              <div class="food-share-section mb-4">
+                <label class="form-label">Food Share</label>
+                <div class="food-share-bar">
+                  <div 
+                    *ngFor="let food of foods; let i = index"
+                    class="food-share-segment"
+                    [style.width.%]="food.percentage"
+                    [style.background-color]="getColor(i)">
+                    <span class="share-percent">{{ food.percentage }}%</span>
+                  </div>
+                </div>
+                <div class="food-labels mt-2">
+                  <div 
+                    *ngFor="let food of foods; let i = index"
+                    class="food-label">
+                    <span 
+                      class="color-dot" 
+                      [style.background-color]="getColor(i)"></span>
+                    {{ food.name || 'Food ' + (i + 1) }}
+                  </div>
+                </div>
+              </div>
+
+              <!--sliders -->
+              <div *ngIf="foods.length > 1" class="mb-4">
+                <div *ngFor="let food of foods; let i = index" class="mb-3">
+                  <label class="form-label">
+                    {{ food.name || 'Food ' + (i + 1) }} - {{ food.percentage }}%
+                  </label>
+                  <input 
+                    type="range" 
+                    class="form-range" 
+                    min="0" 
+                    max="100"
+                    [(ngModel)]="food.percentage"
+                    [name]="'percentage' + i"
+                    (input)="adjustPercentages(i)">
+                </div>
+              </div>
+
+              <!--totalmeals-->
+              <div class="mb-4">
+                <label class="form-label">Meals per day</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  placeholder="Number of meals"
+                  [(ngModel)]="mealsPerDay"
+                  name="mealsPerDay"
+                  min="1"
+                  step="1">
+              </div>
+
+              <div class="row g-2">
+                <div class="col-6">
+                  <button 
+                    type="button" 
+                    class="btn btn-reload w-100"
+                    (click)="calculateIntake()">
+                    Reload
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button 
+                    type="button" 
+                    class="btn btn-clear w-100"
+                    (click)="clearForm()">
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!--3 result window -->
+        <div class="col-md-4">
+          <div class="step-box rounded-4 p-4 h-100">
+            <h3 class="step-title">Step 3:</h3>
+            <p class="step-description">Personalized portions &lt;3</p>
+            
+            <div *ngIf="showResults" class="results-display">
+              <div class="result-summary mb-3">
+                <div class="result-row">
+                  <strong>Daily calories needed:</strong> {{ rer }}kcal
+                </div>
+                <div class="result-row">
+                  <strong>Meals per day:</strong> {{ mealsPerDay }}
+                </div>
+                <div class="result-row">
+                  <strong>Food types:</strong> {{ foods.length }} food
+                </div>
+              </div>
+
+              <hr class="result-divider">
+
+              <div class="portions-section">
+                <h5 class="portions-title">Per meal portions:</h5>
+                <ul class="portions-list">
+                  <li *ngFor="let result of portionResults">
+                    <strong>{{ result.name }}:</strong> {{ result.gramsPerMeal }}g
+                  </li>
+                </ul>
+              </div>
+
+              <div class="note-section mt-3">
+                <small class="note-text">
+                  <em>Note: These values are based on daily energy needs. Adjust as needed for your cat's appetite and activity.</em>
+                </small>
+              </div>
+            </div>
+
+            <div *ngIf="!showResults" class="no-results text-center py-5">
+              <i class="bi bi-calculator fs-1 text-muted mb-3"></i>
+              <p class="text-muted">Fill in the details and click Reload to see results</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<app-footer></app-footer>
