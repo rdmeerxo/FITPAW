@@ -1,0 +1,59 @@
+{
+  "foods": [
+    {
+      "barcode": "0000000001",
+      "productName": "Whiskas Adult Dry Food Chicken",
+      "brands": "Whiskas",
+      "categories": "Pet food, Cat food, Dry food",
+      "energyKcalPer100g": 350,
+      "servingSize": "40g",
+      "servingSizeGrams": 40,
+      "kcalPerGram": 3.5,
+      "source": "local"
+    },
+    {
+      "barcode": "0000000002",
+      "productName": "Royal Canin Feline Health Nutrition",
+      "brands": "Royal Canin",
+      "categories": "Pet food, Cat food, Dry food",
+      "energyKcalPer100g": 400,
+      "servingSize": "50g",
+      "servingSizeGrams": 50,
+      "kcalPerGram": 4.0,
+      "source": "local"
+    },
+    {
+      "barcode": "0000000003",
+      "productName": "Purina ONE Adult Chicken",
+      "brands": "Purina ONE",
+      "categories": "Pet food, Cat food, Dry food",
+      "energyKcalPer100g": 380,
+      "servingSize": "45g",
+      "servingSizeGrams": 45,
+      "kcalPerGram": 3.8,
+      "source": "local"
+    },
+    {
+      "barcode": "0000000004",
+      "productName": "Felix Wet Food Beef in Jelly",
+      "brands": "Felix",
+      "categories": "Pet food, Cat food, Wet food",
+      "energyKcalPer100g": 85,
+      "servingSize": "100g",
+      "servingSizeGrams": 100,
+      "kcalPerGram": 0.85,
+      "source": "local"
+    },
+    {
+      "barcode": "0000000005",
+      "productName": "Sheba Perfect Portions Chicken",
+      "brands": "Sheba",
+      "categories": "Pet food, Cat food, Wet food",
+      "energyKcalPer100g": 90,
+      "servingSize": "37.5g",
+      "servingSizeGrams": 37.5,
+      "kcalPerGram": 0.9,
+      "source": "local"
+    }
+  ]
+}
