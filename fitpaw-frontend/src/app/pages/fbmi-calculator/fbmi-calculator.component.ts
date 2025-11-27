@@ -12,13 +12,13 @@ import { FooterComponent } from '../../components/footer/footer.component';
   styleUrl: './fbmi-calculator.component.css'
 })
 export class FbmiCalculatorComponent {
-  ribCageCircumference: number = 0;
-  legLength: number = 0;
+  ribCageCircumference: number | null = null;
+  legLength: number | null = null;
   fbmiResult: string = '';
   category: string = '';
 
   calculateFBMI() {
-    if (this.ribCageCircumference > 0 && this.legLength > 0) {
+    if (this.ribCageCircumference != null && this.legLength != null &&  this.ribCageCircumference > 0 && this.legLength > 0) {
       //main formula for BMI = (((RC/0.7067) - LIM) / 0.9156) - LIM
       const rc = this.ribCageCircumference;
       const lim = this.legLength;

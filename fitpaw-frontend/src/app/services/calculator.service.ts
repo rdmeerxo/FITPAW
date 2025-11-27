@@ -6,27 +6,33 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CalculatorService {
-  private apiUrl = 'http://localhost:3000/api/calculate'; //backend port
+  private apiUrl = 'https://192.168.0.108:3001/api'; //backend port
+
 
   constructor(private http: HttpClient) { }
 
-  //FBMI calc
+  //FBMI
   calculateFBMI(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/fbmi`, data);
+    return this.http.post(`${this.apiUrl}/bmi/calculate`, data);
   }
 
   //CIC
   calculateCalories(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/calories`, data);
+    return this.http.post(`${this.apiUrl}/calorie/calculate`, data);
   }
 
   //FIC
   calculateFoodIntake(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/food-intake`, data);
+    return this.http.post(`${this.apiUrl}/feeding-plan/calculate`, data);
   }
 
   //AC
   convertAge(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/age-converter`, data);
+    return this.http.post(`${this.apiUrl}/age/convert`, data);
+  }
+
+  //Barcode lookup
+  lookupFoodByBarcode(barcode: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/food/lookup/${barcode}`);
   }
 }

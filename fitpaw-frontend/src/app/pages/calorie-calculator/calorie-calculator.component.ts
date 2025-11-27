@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { CalculatorService } from '../../services/calculator.service'; // ADD THIS
 
 @Component({
   selector: 'app-calorie-calculator',
@@ -12,9 +13,12 @@ import { FooterComponent } from '../../components/footer/footer.component';
   styleUrl: './calorie-calculator.component.css'
 })
 export class CalorieCalculatorComponent {
-  weight: number = 0;
+  
+  constructor(private calculatorService: CalculatorService) {} // ADD THIS
+  
+  weight: number | null = null;
   isNeutered: boolean = true;
-  age: number = 0;
+  age: number | null = null;
   ageUnit: string = 'years';
   weightGoal: string = 'na';
   
@@ -24,48 +28,58 @@ export class CalorieCalculatorComponent {
   weightGainCalories: string = '';
 
   calculateCalories() {
-    if (this.weight > 0 && this.age >= 0) {
-      //RERformula --> 70 × (Weight)^0.75
-      const rer = 70 * Math.pow(this.weight, 0.75);
+    if (this.weight != null && this.age != null && this.weight > 0 && this.age >= 0) {
+      // converting age to years for backend
+      const ageInYears = this.ageUnit === 'years' ? this.age : this.age / 12;
       
-      //age or months
-      const ageInMonths = this.ageUnit === 'years' ? this.age * 12 : this.age;
+      //map weight goal to backend format
+      let goalParam = 'none';
+      if (this.weightGoal === 'loss') goalParam = 'weight_loss';
+      else if (this.weightGoal === 'gain') goalParam = 'weight_gain';
       
-      let dailyNeeds = 0;
+      const data = {
+        weightKg: Number(this.weight),
+        neutered: this.isNeutered,
+        age: Number(ageInYears),
+        goal: goalParam
+      };
       
-      if (ageInMonths <= 4) {
-        //kitten 0-4 monthsold
-        dailyNeeds = 2.5 * rer;
-      } else if (ageInMonths <= 12) {
-        //kitten 4-12 months old
-        dailyNeeds = 2 * rer;
-      } else {
-        //if not kitten, then considering neuter conditions for adults
-        if (this.isNeutered) {
-          dailyNeeds = 1.2 * rer;
-        } else {
-          dailyNeeds = 1.4 * rer;
+      //call backend API, helloooo
+      this.calculatorService.calculateCalories(data).subscribe({
+        next: (response) => {
+          this.totalCalories = response.caloriesPerDay.toString();
+          this.weightLossCalories = response.weightLossCalories.toString();
+          this.weightGainCalories = response.weightGainCalories.toString();
+          this.showResults = true;
+          
+          // saving the appropriate calories based on weight goal
+          let caloriesToSave = response.caloriesPerDay;
+          
+          if (this.weightGoal === 'loss') {
+            caloriesToSave = response.weightLossCalories;
+          } else if (this.weightGoal === 'gain') {
+            caloriesToSave = response.weightGainCalories;
+          }
+          
+          // save for food intake calculator
+          localStorage.setItem('lastRER', caloriesToSave.toString());
+          console.log('Saved to localStorage:', caloriesToSave); // Debug
+        },
+        error: (error) => {
+          console.error('Error calculating calories:', error);
+          alert('Error calculating calories. Please try again.');
+          this.showResults = false;
         }
-      }
-      
-      //any wight goal adjustments 
-      const weightLoss = 0.8 * rer;
-      const weightGain = 1.8 * rer;
-      
-      //showing results
-      this.totalCalories = dailyNeeds.toFixed(0);
-      this.weightLossCalories = weightLoss.toFixed(0);
-      this.weightGainCalories = weightGain.toFixed(0);
-      this.showResults = true;
+      });
     } else {
       this.showResults = false;
     }
   }
 
   clearForm() {
-    this.weight = 0;
+    this.weight = null;
     this.isNeutered = true;
-    this.age = 0;
+    this.age = null;
     this.ageUnit = 'years';
     this.weightGoal = 'na';
     this.showResults = false;

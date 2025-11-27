@@ -330,6 +330,60 @@
   display: block;
 }
 
+.scanner-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanner-container {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.scanner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.scanner-header h5 {
+  margin: 0;
+  color: #333;
+}
+
+.btn-close-scanner {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.barcode-reader {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.scanner-instruction {
+  text-align: center;
+  margin-top: 15px;
+  color: #666;
+  font-size: 14px;
+}
+
 @media (max-width: 932px) {
   .hero-wrapper {
     width: 90%;

@@ -78,12 +78,36 @@
                       min="0">
                   </div>
                 </div>
-                <button 
-                  type="button" 
-                  class="btn btn-scan btn-sm w-100 mb-2"
-                  (click)="scanBarcode(i)">
-                  <i class="bi bi-upc-scan me-1"></i> Scan Barcode
-                </button>
+                
+                <!-- BAAAARCODEE-->
+                <div class="barcode-section">
+                  <input 
+                    type="text" 
+                    class="form-control form-control-sm mb-2" 
+                    placeholder="Enter barcode (e.g. 5449000000996)"
+                    [(ngModel)]="manualBarcode"
+                    [name]="'manualBarcode' + i">
+                  
+                  <div class="row g-2 mb-2">
+                    <div class="col-6 d-md-none">
+                      <button 
+                        type="button" 
+                        class="btn btn-scan btn-sm w-100"
+                        (click)="scanBarcode(i)">
+                        <i class="bi bi-upc-scan me-1"></i> Scan
+                      </button>
+                    </div>
+                    <div class="col-6 col-md-12">
+                      <button 
+                        type="button" 
+                        class="btn btn-primary btn-sm w-100"
+                        (click)="lookupManualBarcode(i)">
+                        <i class="bi bi-search me-1"></i> Lookup
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
                 <button 
                   *ngIf="foods.length > 1"
                   type="button" 
@@ -236,6 +260,17 @@
       </div>
     </div>
   </section>
+
+  <div *ngIf="isScannerActive" class="scanner-modal">
+    <div class="scanner-container">
+      <div class="scanner-header">
+        <h5>Scan Barcode</h5>
+        <button class="btn-close-scanner" (click)="stopScanner()">✕</button>
+      </div>
+      <div id="barcode-reader" class="barcode-reader"></div>
+      <p class="scanner-instruction">Point camera at barcode</p>
+    </div>
+</div>
 
 </div>
 

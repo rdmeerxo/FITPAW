@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { CalculatorService } from '../../services/calculator.service';
+import { Html5Qrcode } from 'html5-qrcode';
 
 interface Food {
   name: string;
@@ -23,6 +25,7 @@ interface PortionResult {
   templateUrl: './food-intake-calculator.component.html',
   styleUrl: './food-intake-calculator.component.css'
 })
+
 export class FoodIntakeCalculatorComponent implements OnInit {
   rer: number = 0;
   mealsPerDay: number = 2;
@@ -34,6 +37,13 @@ export class FoodIntakeCalculatorComponent implements OnInit {
   portionResults: PortionResult[] = [];
   
   colors: string[] = ['#ebc2c2ff', '#4ECDC4', '#276370ff', '#FFA07A', '#98D8C8'];
+
+  html5QrCode: Html5Qrcode | null = null;
+  isScannerActive: boolean = false;
+  currentScanningIndex: number = -1;
+  manualBarcode: string = '';
+
+  constructor(private calculatorService: CalculatorService) {}
 
   ngOnInit() {
     //loading RER value from localStorage if user came from calorie calculator
@@ -90,9 +100,107 @@ export class FoodIntakeCalculatorComponent implements OnInit {
   }
 
   scanBarcode(index: number) {
-    //barcode scanning with camera
-    //for now, showing alert
-    alert('Barcode scanning will be implemented with camera access and Open Food Facts API integration later. So for now, please enter manually hehe.');
+    this.currentScanningIndex = index;
+    this.isScannerActive = true;
+    
+    // Start scanner after a brief delay to let the modal/element render
+    setTimeout(() => {
+      this.startScanner();
+    }, 100);
+  }
+
+  async startScanner() {
+    try {
+      this.html5QrCode = new Html5Qrcode("barcode-reader");
+      
+      await this.html5QrCode.start(
+        { 
+          facingMode: "environment" //backcamera
+        },
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 80 },
+          aspectRatio: 2.5,
+          disableFlip: false
+        },
+        (decodedText) => {
+          // Success! Got barcode :P
+          this.onScanSuccess(decodedText);
+        },
+        (errorMessage) => {
+          // scan errors (can ignore)
+        }
+      );
+    } catch (err) {
+      console.error("Failed to start scanner:", err);
+      alert("Could not access camera. Please check permissions or enter barcode manually.");
+      this.stopScanner();
+    }
+  }
+
+  onScanSuccess(barcode: string) {
+    console.log("Step 1: Scanned barcode:", barcode);
+
+
+    //saving the index before stopping scanner in order to automatically fill
+    //the input box T_T
+    const foodIndex = this.currentScanningIndex;
+  
+    //stop
+    this.stopScanner();
+    console.log("Step 2: Scanner stopped");
+  
+    //fetching food data from backend
+    console.log("Step 3: About to call backend API...");
+    console.log("Step 4: API URL will be:", `http://192.168.0.108:3001/api/food/lookup/${barcode}`);
+  
+    this.calculatorService.lookupFoodByBarcode(barcode).subscribe({
+      next: (response) => {
+        console.log("Step 5: SUCCESS! Food data:", response);
+        console.log("Saved food index:", foodIndex);
+        
+        // updaate the food entry
+        if (foodIndex >= 0 && foodIndex < this.foods.length) {
+          this.foods[foodIndex].name = response.productName;
+          this.foods[foodIndex].caloriesPer100g = response.energyKcalPer100g || 0;
+          console.log("Updated food:", this.foods[foodIndex]);
+        }
+        
+        alert(`Found: ${response.productName}\nCalories: ${response.energyKcalPer100g} kcal/100g`);
+      },
+      error: (error) => {
+        console.error("Step 5: ERROR!", error);
+        alert("Could not find product. Please enter calories manually.");
+      }
+    });
+}
+
+  stopScanner() {
+    if (this.html5QrCode) {
+      this.html5QrCode.stop().then(() => {
+        this.html5QrCode = null;
+        this.isScannerActive = false;
+        this.currentScanningIndex = -1;
+      }).catch((err) => {
+        console.error("Error stopping scanner:", err);
+        this.isScannerActive = false;
+        this.currentScanningIndex = -1;
+      });
+    } else {
+      this.isScannerActive = false;
+      this.currentScanningIndex = -1;
+    }
+  }
+
+  lookupManualBarcode(index: number) {
+    if (!this.manualBarcode || this.manualBarcode.length < 6) {
+      alert('Please enter a valid barcode (minimum 6 digits)');
+      return;
+    }
+    
+    this.currentScanningIndex = index;
+    this.onScanSuccess(this.manualBarcode);
+    this.manualBarcode = ''; //clearing after lookup
   }
 
   calculateIntake() {
