@@ -7,22 +7,23 @@
     </a>
 
     <div class="nav-buttons d-flex gap-3 align-items-center">
-      <button class="btn btn-nav" routerLink="/fbmi" routerLinkActive="active">Body Assessment</button>
-      <button class="btn btn-nav" routerLink="/calorie" routerLinkActive="active">Cat Nutrition</button>
-      <button class="btn btn-nav" routerLink="/food-intake" routerLinkActive="active">Food Intake</button>
-      <button class="btn btn-nav" routerLink="/age-converter" routerLinkActive="active">Human-Year Age</button>
 
-      <!-- Guest buttons -->
+      <!-- Guest: show calculators + login/register -->
       <ng-container *ngIf="!authService.isLoggedIn()">
+        <button class="btn btn-nav" routerLink="/fbmi" routerLinkActive="active">Body Assessment</button>
+        <button class="btn btn-nav" routerLink="/calorie" routerLinkActive="active">Cat Nutrition</button>
+        <button class="btn btn-nav" routerLink="/food-intake" routerLinkActive="active">Food Intake</button>
+        <button class="btn btn-nav" routerLink="/age-converter" routerLinkActive="active">Human-Year Age</button>
         <button class="btn btn-login" routerLink="/login">Login</button>
         <button class="btn btn-register" routerLink="/register">Register</button>
       </ng-container>
 
-      <!-- Logged in -->
+      <!-- Logged in: just dashboard + logout -->
       <ng-container *ngIf="authService.isLoggedIn()">
         <button class="btn btn-dashboard" routerLink="/dashboard">Dashboard</button>
         <button class="btn btn-logout" (click)="logout()">Log out</button>
       </ng-container>
+
     </div>
 
     <button class="hamburger-btn" (click)="toggleMenu()">
@@ -39,19 +40,22 @@
   </button>
 
   <div class="mobile-nav-buttons">
-    <button class="btn btn-nav-mobile" routerLink="/fbmi" (click)="toggleMenu()">Body Assessment</button>
-    <button class="btn btn-nav-mobile" routerLink="/calorie" (click)="toggleMenu()">Cat Nutrition</button>
-    <button class="btn btn-nav-mobile" routerLink="/food-intake" (click)="toggleMenu()">Food Intake</button>
-    <button class="btn btn-nav-mobile" routerLink="/age-converter" (click)="toggleMenu()">Human-Year Age</button>
 
+    <!-- Guest mobile -->
     <ng-container *ngIf="!authService.isLoggedIn()">
+      <button class="btn btn-nav-mobile" routerLink="/fbmi" (click)="toggleMenu()">Body Assessment</button>
+      <button class="btn btn-nav-mobile" routerLink="/calorie" (click)="toggleMenu()">Cat Nutrition</button>
+      <button class="btn btn-nav-mobile" routerLink="/food-intake" (click)="toggleMenu()">Food Intake</button>
+      <button class="btn btn-nav-mobile" routerLink="/age-converter" (click)="toggleMenu()">Human-Year Age</button>
       <button class="btn btn-login" routerLink="/login" (click)="toggleMenu()">Login</button>
       <button class="btn btn-register" routerLink="/register" (click)="toggleMenu()">Register</button>
     </ng-container>
 
+    <!-- Logged in mobile -->
     <ng-container *ngIf="authService.isLoggedIn()">
       <button class="btn btn-dashboard" routerLink="/dashboard" (click)="toggleMenu()">Dashboard</button>
       <button class="btn btn-logout" (click)="logout(); toggleMenu()">Log out</button>
     </ng-container>
+
   </div>
 </div>
