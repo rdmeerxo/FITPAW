@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
-import { CalculatorService } from '../../services/calculator.service'; // ADD THIS
+import { CalculatorService } from '../../services/calculator.service'; 
 
 @Component({
   selector: 'app-calorie-calculator',
@@ -14,7 +14,7 @@ import { CalculatorService } from '../../services/calculator.service'; // ADD TH
 })
 export class CalorieCalculatorComponent {
   
-  constructor(private calculatorService: CalculatorService) {} // ADD THIS
+  constructor(private calculatorService: CalculatorService) {} 
   
   weight: number | null = null;
   isNeutered: boolean = true;
@@ -44,7 +44,7 @@ export class CalorieCalculatorComponent {
         goal: goalParam
       };
       
-      //call backend API, helloooo
+      //calling backend API, helloooo
       this.calculatorService.calculateCalories(data).subscribe({
         next: (response) => {
           this.totalCalories = response.caloriesPerDay.toString();

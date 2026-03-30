@@ -1,0 +1,84 @@
+<app-header></app-header>
+
+<div class="register-page">
+  <div class="auth-container">
+
+    <div class="auth-top">
+      <div class="auth-paw">🐱</div>
+      <h1 class="auth-title">Create account</h1>
+      <p class="auth-sub">Free forever. No credit card needed.</p>
+    </div>
+
+    <div class="auth-card">
+
+      <div class="notice-box">
+        🔒 We don't store your calculation results.
+        Only your profile and saved entries are kept.
+      </div>
+
+      <div class="error-banner" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">
+          Username
+          <span class="field-hint">(3–20 characters)</span>
+        </label>
+        <input
+          type="text"
+          class="field-input"
+          placeholder="choose_a_username"
+          [(ngModel)]="username"
+          name="username"
+          maxlength="20"
+          [disabled]="isLoading">
+        <div class="char-count" [class.warn]="username.length > 17">
+          {{ username.length }} / 20
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Password
+          <span class="field-hint">(min 6 characters)</span>
+        </label>
+        <input
+          type="password"
+          class="field-input"
+          placeholder="••••••••"
+          [(ngModel)]="password"
+          name="password"
+          [disabled]="isLoading">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Confirm password</label>
+        <input
+          type="password"
+          class="field-input"
+          [class.mismatch]="confirmPassword && password !== confirmPassword"
+          placeholder="••••••••"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          [disabled]="isLoading"
+          (keyup.enter)="onRegister()">
+        <div class="mismatch-text" *ngIf="confirmPassword && password !== confirmPassword">
+          Passwords do not match
+        </div>
+      </div>
+
+      <button class="btn-primary" (click)="onRegister()" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Create account</span>
+        <span *ngIf="isLoading">Creating account...</span>
+      </button>
+
+    </div>
+
+    <p class="switch-link">
+      Already have an account? <a routerLink="/login">Sign in</a>
+    </p>
+
+  </div>
+</div>
+
+<app-footer></app-footer>

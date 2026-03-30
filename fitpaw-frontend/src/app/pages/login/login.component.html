@@ -1,0 +1,70 @@
+<app-header></app-header>
+
+<div class="login-page">
+  <div class="auth-container">
+
+    <div class="auth-top">
+      <div class="auth-paw">🐾</div>
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-sub">Sign in to track your cat's health</p>
+    </div>
+
+    <div class="auth-card">
+
+      <div class="error-banner" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Username</label>
+        <input
+          type="text"
+          class="field-input"
+          placeholder="your_username"
+          [(ngModel)]="username"
+          name="username"
+          [disabled]="isLoading">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input
+          type="password"
+          class="field-input"
+          placeholder="••••••••"
+          [(ngModel)]="password"
+          name="password"
+          [disabled]="isLoading"
+          (keyup.enter)="onLogin()">
+      </div>
+
+      <button class="btn-primary" (click)="onLogin()" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Sign in</span>
+        <span *ngIf="isLoading">Signing in...</span>
+      </button>
+
+      <div class="divider"><span>or</span></div>
+
+      <button class="btn-secondary" (click)="continueAsGuest()">
+        Continue without account
+      </button>
+
+    </div>
+
+    <div class="notice-box">
+      🔒 We never store your calculation results.
+      Only your profile and saved entries are kept.
+    </div>
+
+    <p class="switch-link">
+      New here? <a routerLink="/register">Create an account</a>
+    </p>
+
+    <p class="test-accounts">
+      Testing? Use <strong>testuser1</strong> / <strong>fitpaw123</strong>
+    </p>
+
+  </div>
+</div>
+
+<app-footer></app-footer>

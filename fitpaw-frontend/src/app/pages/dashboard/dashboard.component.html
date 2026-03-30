@@ -1,0 +1,185 @@
+<app-header></app-header>
+
+<div class="dashboard-page">
+
+  <!-- ── Top bar ── -->
+  <div class="dash-topbar">
+    <div class="dash-greeting">
+      <span class="greeting-line">Welcome back,</span>
+      <span class="greeting-name">{{ user?.username }} 🐾</span>
+    </div>
+    <button class="btn-logout" (click)="logout()">Log out</button>
+  </div>
+
+  <!-- ── Loading ── -->
+  <div class="loading-state" *ngIf="isLoadingCats">
+    Loading your cats...
+  </div>
+
+  <!-- ── No cats yet ── -->
+  <div class="empty-state" *ngIf="!isLoadingCats && cats.length === 0">
+    <div class="empty-icon">🐱</div>
+    <h2>No cats yet!</h2>
+    <p>Add your first cat to start tracking their health.</p>
+    <button class="btn-primary" (click)="showAddCat = true">Add my cat</button>
+  </div>
+
+  <!-- ── Main dashboard ── -->
+  <div class="dash-body" *ngIf="!isLoadingCats && cats.length > 0">
+
+    <!-- Cat selector tabs -->
+    <div class="cat-tabs">
+      <button
+        *ngFor="let cat of cats"
+        class="cat-tab"
+        [class.active]="selectedCat?.id === cat.id"
+        (click)="selectCat(cat)">
+        🐱 {{ cat.name }}
+      </button>
+      <button class="cat-tab add-tab" (click)="showAddCat = !showAddCat">
+        + Add cat
+      </button>
+    </div>
+
+    <!-- Add cat form -->
+    <div class="form-card" *ngIf="showAddCat">
+      <h3 class="form-card-title">Add a new cat</h3>
+      <div class="error-banner" *ngIf="addCatError">{{ addCatError }}</div>
+      <div class="field-group">
+        <label class="field-label">Cat's name <span class="field-hint">(max 30 chars)</span></label>
+        <input type="text" class="field-input" placeholder="e.g. Mochi" [(ngModel)]="newCatName" maxlength="30">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Date of birth <span class="field-hint">(optional)</span></label>
+        <input type="date" class="field-input" [(ngModel)]="newCatDob">
+      </div>
+      <div class="field-group checkbox-group">
+        <input type="checkbox" id="neutered" [(ngModel)]="newCatNeutered">
+        <label for="neutered">Spayed / Neutered</label>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" (click)="submitAddCat()" [disabled]="isSaving">
+          {{ isSaving ? 'Saving...' : 'Add cat' }}
+        </button>
+        <button class="btn-cancel" (click)="showAddCat = false">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Selected cat panel -->
+    <div class="cat-panel" *ngIf="selectedCat">
+
+      <!-- Stat cards -->
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-label">Latest weight</div>
+          <div class="stat-value">
+            {{ latestLog ? latestLog.weight_kg + ' kg' : '—' }}
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">FBMI</div>
+          <div class="stat-value">
+            {{ latestLog?.fbmi ? latestLog.fbmi + '%' : '—' }}
+          </div>
+          <span class="stat-badge" [ngClass]="fbmiClass" *ngIf="latestLog?.fbmi">
+            {{ fbmiCategory }}
+          </span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Age</div>
+          <div class="stat-value age-val">
+            {{ catAge(selectedCat.date_of_birth) }}
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Neuter status</div>
+          <div class="stat-value">{{ selectedCat.neuter_status ? 'Spayed / Neutered' : 'Intact' }}</div>
+        </div>
+      </div>
+
+      <!-- Log weight button -->
+      <button class="btn-log" (click)="showLogWeight = !showLogWeight">
+        {{ showLogWeight ? '✕ Cancel' : '+ Log today\'s weight' }}
+      </button>
+
+      <!-- Log weight form -->
+      <div class="form-card" *ngIf="showLogWeight">
+        <h3 class="form-card-title">Log weight for {{ selectedCat.name }}</h3>
+        <div class="error-banner" *ngIf="logError">{{ logError }}</div>
+        <div class="field-group">
+          <label class="field-label">Weight (kg) *</label>
+          <input type="number" class="field-input" placeholder="e.g. 4.2" [(ngModel)]="newWeight" step="0.1">
+        </div>
+        <p class="optional-note">Optional: enter measurements to also save FBMI</p>
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Rib circumference (cm)</label>
+            <input type="number" class="field-input" placeholder="e.g. 33" [(ngModel)]="newRibCirc">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Leg length (cm)</label>
+            <input type="number" class="field-input" placeholder="e.g. 12" [(ngModel)]="newLegLength">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" (click)="submitLog()" [disabled]="isSaving">
+            {{ isSaving ? 'Saving...' : 'Save log' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick links to calculators -->
+      <div class="section-title">Calculators</div>
+      <div class="calc-grid">
+        <a routerLink="/fbmi" class="calc-card">
+          <div class="calc-icon">📏</div>
+          <div class="calc-name">FBMI</div>
+          <div class="calc-sub">Body assessment</div>
+        </a>
+        <a routerLink="/calorie" class="calc-card">
+          <div class="calc-icon">🔥</div>
+          <div class="calc-name">Calories</div>
+          <div class="calc-sub">Daily needs</div>
+        </a>
+        <a routerLink="/food-intake" class="calc-card">
+          <div class="calc-icon">🍽️</div>
+          <div class="calc-name">Food portion</div>
+          <div class="calc-sub">Per meal</div>
+        </a>
+        <a routerLink="/age-converter" class="calc-card">
+          <div class="calc-icon">🎂</div>
+          <div class="calc-name">Age</div>
+          <div class="calc-sub">Human years</div>
+        </a>
+      </div>
+
+      <!-- History log -->
+      <div class="section-title">Weight &amp; FBMI history</div>
+      <div class="loading-state" *ngIf="isLoadingLogs">Loading history...</div>
+      <div class="empty-logs" *ngIf="!isLoadingLogs && logs.length === 0">
+        No logs yet — add one above!
+      </div>
+      <div class="logs-table" *ngIf="!isLoadingLogs && logs.length > 0">
+        <div class="log-row header-row">
+          <span>Date</span>
+          <span>Weight</span>
+          <span>FBMI</span>
+          <span>Change</span>
+          <span></span>
+        </div>
+        <div class="log-row" *ngFor="let log of logs; let i = index">
+          <span class="log-date">{{ formatDate(log.logged_at) }}</span>
+          <span class="log-weight">{{ log.weight_kg }} kg</span>
+          <span class="log-fbmi">{{ log.fbmi ? log.fbmi + '%' : '—' }}</span>
+          <span class="log-trend" [ngClass]="weightTrendClass(i)">{{ weightTrend(i) }}</span>
+          <span>
+            <button class="btn-delete" (click)="deleteLog(log.id)" title="Delete">✕</button>
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
