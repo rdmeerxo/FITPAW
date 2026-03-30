@@ -208,16 +208,12 @@
 
 @media (max-width: 932px) {
   .navbar {
-    justify-content: center !important;
+    justify-content: space-between !important;
   }
-  
+
   .container-fluid {
-    justify-content: center !important;
-  }
-  
-  .navbar-logo {
-    margin: 0 auto;
-    text-align: center;
+    justify-content: space-between !important;
+    flex-wrap: wrap;
   }
 
   .navbar-logo img {
@@ -225,10 +221,14 @@
   }
 
   .nav-buttons {
-    display: none !important;
+    display: flex !important;
+    width: 100%;
+    justify-content: center;
+    padding: 8px 0;
   }
 
   .hamburger-btn {
-    display: block;
+    display: none;
   }
 }
+
