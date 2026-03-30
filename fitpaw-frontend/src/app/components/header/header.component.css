@@ -152,6 +152,46 @@
   background-color: #FDA150;
 }
 
+.btn-login {
+  border: 1.5px solid #51675F;
+  color: #51675F;
+  background: transparent;
+  border-radius: 20px;
+  padding: 6px 18px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.btn-register {
+  background: #51675F;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 18px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.btn-dashboard {
+  background: #FDA150;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 18px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.btn-logout {
+  border: 1.5px solid #51675F;
+  color: #51675F;
+  background: transparent;
+  border-radius: 20px;
+  padding: 6px 18px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
 
 @media (max-width: 932px) {
   .navbar {

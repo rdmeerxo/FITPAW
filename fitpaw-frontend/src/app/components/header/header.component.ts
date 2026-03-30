@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive} from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,14 +10,13 @@ import { CommonModule } from '@angular/common';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-
 export class HeaderComponent {
   isMenuOpen = false;
 
+  constructor(public authService: AuthService) {}
+
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
-
-    //dont scroll body when menu is open
     if (this.isMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -25,4 +24,7 @@ export class HeaderComponent {
     }
   }
 
+  logout() {
+    this.authService.logout();
+  }
 }
