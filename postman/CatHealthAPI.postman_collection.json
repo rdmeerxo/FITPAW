@@ -1,0 +1,398 @@
+{
+	"info": {
+		"name": "Cat Health API",
+		"_postman_id": "cat-health-clean-single",
+		"description": "Single clean collection for Cat Health backend: BMI, Calorie, Age, Food lookup, Feeding plan.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "BMI",
+			"item": [
+				{
+					"name": "Calculate",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"url": {
+							"raw": "{{base_url}}/api/bmi/calculate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "bmi", "calculate"]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ribCage\": {{ribCage}},\n  \"legLength\": {{legLength}}\n}"
+						},
+						"description": "Calculate feline BMI (bmi = ribCage/legLength - 0.7)."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"const b = pm.response.json();",
+									"pm.test('Has bmi', () => pm.expect(b).to.have.property('bmi'));",
+									"pm.test('Has category', () => pm.expect(b).to.have.property('category'));"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Validation Error (missing legLength)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"url": {
+							"raw": "{{base_url}}/api/bmi/calculate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "bmi", "calculate"]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ribCage\": {{ribCage}}\n}"
+						},
+						"description": "Trigger validation error by omitting legLength."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));",
+									"const b = pm.response.json();",
+									"pm.test('Error object', () => pm.expect(b).to.have.property('error'));"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Calorie",
+			"item": [
+				{
+					"name": "Calculate",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"url": {
+							"raw": "{{base_url}}/api/calorie/calculate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "calorie", "calculate"]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"weightKg\": {{weightKg}},\n  \"neutered\": {{neutered}},\n  \"age\": {{age}},\n  \"goal\": \"{{goal}}\"\n}"
+						},
+						"description": "Calculate daily calories (RER + factors)."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"const b = pm.response.json();",
+									"pm.test('Has caloriesPerDay', () => pm.expect(b).to.have.property('caloriesPerDay'));"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Age",
+			"item": [
+				{
+					"name": "Convert",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"url": {
+							"raw": "{{base_url}}/api/age/convert",
+							"host": ["{{base_url}}"],
+							"path": ["api", "age", "convert"]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"catAgeYears\": {{ageYears}}\n}"
+						},
+						"description": "Convert cat age to human equivalent."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.expect(pm.response.json()).to.have.property('humanAge');"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Food",
+			"item": [
+				{
+					"name": "Lookup",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/food/lookup/{{barcode}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "food", "lookup", "{{barcode}}"]
+						},
+						"description": "Lookup product nutrition via Open Food Facts by barcode."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.expect(pm.response.json()).to.have.property('barcode');"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Lookup Invalid Barcode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/food/lookup/123",
+							"host": ["{{base_url}}"],
+							"path": ["api", "food", "lookup", "123"]
+						},
+						"description": "Trigger validation error due to short barcode length."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Feeding Plan",
+			"item": [
+				{
+					"name": "Calculate",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"url": {
+							"raw": "{{base_url}}/api/feeding-plan/calculate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "feeding-plan", "calculate"]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"barcode\": \"{{barcode}}\",\n  \"manualKcalPerGram\": {{manualKcalPerGram}},\n  \"weightKg\": {{weightKg}},\n  \"neutered\": {{neutered}},\n  \"age\": {{age}},\n  \"goal\": \"{{goal}}\",\n  \"mealsPerDay\": {{mealsPerDay}},\n  \"activityLevel\": \"{{activityLevel}}\",\n  \"foodType\": \"{{foodType}}\"\n}"
+						},
+						"description": "Compute personalized feeding plan (daily calories, grams per meal, schedule)."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"const b = pm.response.json();",
+									"pm.test('Has dailyCalories', () => pm.expect(b).to.have.property('dailyCalories'));",
+									"pm.test('Has gramsPerMeal', () => pm.expect(b).to.have.property('gramsPerMeal'));"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Validation Error (bad mealsPerDay)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"url": {
+							"raw": "{{base_url}}/api/feeding-plan/calculate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "feeding-plan", "calculate"]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"barcode\": \"{{barcode}}\",\n  \"weightKg\": {{weightKg}},\n  \"neutered\": {{neutered}},\n  \"age\": {{age}},\n  \"goal\": \"{{goal}}\",\n  \"mealsPerDay\": 0,\n  \"activityLevel\": \"{{activityLevel}}\",\n  \"foodType\": \"{{foodType}}\"\n}"
+						},
+						"description": "Trigger validation error by sending invalid mealsPerDay=0."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Manual Only (no barcode)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"url": {
+							"raw": "{{base_url}}/api/feeding-plan/calculate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "feeding-plan", "calculate"]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"manualKcalPerGram\": {{manualKcalPerGram}},\n  \"weightKg\": {{weightKg}},\n  \"neutered\": {{neutered}},\n  \"age\": {{age}},\n  \"goal\": \"{{goal}}\",\n  \"mealsPerDay\": {{mealsPerDay}},\n  \"activityLevel\": \"{{activityLevel}}\",\n  \"foodType\": \"{{foodType}}\"\n}"
+						},
+						"description": "Compute feeding plan using manualKcalPerGram fallback only."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"const b = pm.response.json();",
+									"pm.test('Has fallback object', () => pm.expect(b).to.have.property('fallback'));"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Barcode Not Found Fallback",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"url": {
+							"raw": "{{base_url}}/api/feeding-plan/calculate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "feeding-plan", "calculate"]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"barcode\": \"000000\",\n  \"manualKcalPerGram\": {{manualKcalPerGram}},\n  \"weightKg\": {{weightKg}},\n  \"neutered\": {{neutered}},\n  \"age\": {{age}},\n  \"goal\": \"{{goal}}\",\n  \"mealsPerDay\": {{mealsPerDay}},\n  \"activityLevel\": \"{{activityLevel}}\",\n  \"foodType\": \"{{foodType}}\"\n}"
+						},
+						"description": "Use invalid barcode with manualKcalPerGram to trigger fallback."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"const b = pm.response.json();",
+									"pm.test('Fallback mode present', () => pm.expect(b).to.have.property('fallback'));"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Validation Error (missing sources)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"url": {
+							"raw": "{{base_url}}/api/feeding-plan/calculate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "feeding-plan", "calculate"]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"weightKg\": {{weightKg}},\n  \"neutered\": {{neutered}},\n  \"age\": {{age}},\n  \"goal\": \"{{goal}}\",\n  \"mealsPerDay\": {{mealsPerDay}},\n  \"activityLevel\": \"{{activityLevel}}\",\n  \"foodType\": \"{{foodType}}\"\n}"
+						},
+						"description": "Trigger validation error by omitting both barcode and manualKcalPerGram."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));",
+									"const b = pm.response.json();",
+									"pm.test('Error details include source requirement', () => pm.expect(b.error.details.some(d => d.includes('Provide either'))).to.be.true);"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Validation Error (manualKcalPerGram too high)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"url": {
+							"raw": "{{base_url}}/api/feeding-plan/calculate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "feeding-plan", "calculate"]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"manualKcalPerGram\": 25,\n  \"weightKg\": {{weightKg}},\n  \"neutered\": {{neutered}},\n  \"age\": {{age}},\n  \"goal\": \"{{goal}}\",\n  \"mealsPerDay\": {{mealsPerDay}},\n  \"activityLevel\": \"{{activityLevel}}\",\n  \"foodType\": \"{{foodType}}\"\n}"
+						},
+						"description": "Trigger validation error with excessive manualKcalPerGram (>=20)."
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));",
+									"const b = pm.response.json();",
+									"pm.test('Error mentions manualKcalPerGram', () => pm.expect(b.error.details.some(d => d.includes('manualKcalPerGram'))).to.be.true);"
+								]
+							}
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{ "key": "base_url", "value": "http://localhost:3000" },
+		{ "key": "barcode", "value": "3182550402017" },
+		{ "key": "weightKg", "value": 4.5 },
+		{ "key": "neutered", "value": true },
+		{ "key": "age", "value": 3 },
+		{ "key": "goal", "value": "none" },
+		{ "key": "mealsPerDay", "value": 3 },
+		{ "key": "activityLevel", "value": "normal" },
+		{ "key": "foodType", "value": "dry" },
+		{ "key": "ribCage", "value": 35 },
+		{ "key": "legLength", "value": 30 },
+		{ "key": "ageYears", "value": 7 },
+		{ "key": "manualKcalPerGram", "value": 3.5 }
+	]
+}

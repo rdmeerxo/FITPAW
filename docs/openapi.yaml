@@ -1,0 +1,255 @@
+openapi: 3.0.3
+info:
+  title: Cat Health API
+  version: 0.1.0
+  description: |
+    API for cat health metrics: BMI, calorie calculation, age conversion, food lookup, and feeding plan.
+    Supports barcode nutrition source or manual kcal/gram fallback.
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/bmi/calculate:
+    post:
+      summary: Calculate feline BMI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ribCage, legLength]
+              properties:
+                ribCage:
+                  type: number
+                  minimum: 0
+                legLength:
+                  type: number
+                  minimum: 0
+      responses:
+        '200':
+          description: BMI result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bmi: { type: number }
+                  category: { type: string }
+        '400':
+          $ref: '#/components/responses/ValidationError'
+  /api/calorie/calculate:
+    post:
+      summary: Calculate daily calories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [weightKg, neutered, age, goal]
+              properties:
+                weightKg: { type: number, minimum: 0 }
+                neutered: { type: boolean }
+                age: { type: number, minimum: 0 }
+                goal:
+                  type: string
+                  enum: [weight_loss, weight_gain, none, maintain]
+      responses:
+        '200':
+          description: Calorie factors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  weightKg: { type: number }
+                  neutered: { type: boolean }
+                  age: { type: number }
+                  goal: { type: string }
+                  rer: { type: number }
+                  baselineFactor: { type: number }
+                  goalModifier: { type: number }
+                  ageAdjustment: { type: number }
+                  totalFactor: { type: number }
+                  caloriesPerDay: { type: number }
+        '400':
+          $ref: '#/components/responses/ValidationError'
+  /api/age/convert:
+    post:
+      summary: Convert cat age to human age
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [catAgeYears]
+              properties:
+                catAgeYears: { type: number, minimum: 0 }
+      responses:
+        '200':
+          description: Human age equivalent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  humanAge: { type: number }
+        '400':
+          $ref: '#/components/responses/ValidationError'
+  /api/food/lookup/{barcode}:
+    get:
+      summary: Lookup product nutrition by barcode
+      parameters:
+        - in: path
+          name: barcode
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9]{6,14}$'
+      responses:
+        '200':
+          description: Product nutrition
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  barcode: { type: string }
+                  productName: { type: string }
+                  brands: { type: string }
+                  categories: { type: string }
+                  energyKcalPer100g: { type: number, nullable: true }
+                  servingSize: { type: string, nullable: true }
+                  servingSizeGrams: { type: number, nullable: true }
+                  kcalPerGram: { type: number, nullable: true }
+                  image: { type: string, nullable: true }
+                  source: { type: string, enum: [api, cache] }
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '502':
+          $ref: '#/components/responses/UpstreamError'
+  /api/feeding-plan/calculate:
+    post:
+      summary: Compute feeding plan
+      description: Provide either barcode OR manualKcalPerGram. If barcode lookup fails and manualKcalPerGram provided, falls back.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                [
+                  weightKg,
+                  neutered,
+                  age,
+                  goal,
+                  mealsPerDay,
+                  activityLevel,
+                  foodType,
+                ]
+              properties:
+                barcode:
+                  type: string
+                  pattern: '^[0-9]{6,14}$'
+                manualKcalPerGram:
+                  type: number
+                  minimum: 0
+                  exclusiveMinimum: false
+                  maximum: 20
+                weightKg: { type: number, minimum: 0 }
+                neutered: { type: boolean }
+                age: { type: number, minimum: 0 }
+                goal:
+                  {
+                    type: string,
+                    enum: [weight_loss, weight_gain, none, maintain],
+                  }
+                mealsPerDay: { type: integer, minimum: 1, maximum: 12 }
+                activityLevel: { type: string, enum: [low, normal, high] }
+                foodType: { type: string, enum: [dry, wet, mixed] }
+      responses:
+        '200':
+          description: Feeding plan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    type: object
+                    properties:
+                      barcode: { type: string, nullable: true }
+                      name: { type: string }
+                      kcalPerGram: { type: number }
+                      energyKcalPer100g: { type: number, nullable: true }
+                  factors:
+                    type: object
+                    properties:
+                      rer: { type: number }
+                      baselineFactor: { type: number }
+                      goalModifier: { type: number }
+                      ageAdjustment: { type: number }
+                      totalFactor: { type: number }
+                      activityFactor: { type: number }
+                  dailyCalories: { type: number }
+                  mealsPerDay: { type: integer }
+                  gramsPerDay: { type: number }
+                  gramsPerMeal: { type: number }
+                  schedule:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        time: { type: string }
+                        grams: { type: number }
+                  notes: { type: string, nullable: true }
+                  fallback:
+                    type: object
+                    nullable: true
+                    properties:
+                      mode: { type: string }
+                      kcalPerGram: { type: number }
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '502':
+          $ref: '#/components/responses/UpstreamError'
+components:
+  responses:
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFoundError:
+      description: Resource or product not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UpstreamError:
+      description: Upstream/network issue
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message: { type: string }
+            details:
+              type: array
+              items: { type: string }
+              nullable: true
+            code: { type: string, nullable: true }
+      required: [error]

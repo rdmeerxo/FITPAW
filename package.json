@@ -1,0 +1,22 @@
+{
+	"name": "fitpaw-backend",
+	"version": "0.1.0",
+	"type": "module",
+	"main": "src/server.js",
+	"license": "MIT",
+	"scripts": {
+		"start": "node src/server.js",
+		"dev": "nodemon src/server.js"
+	},
+	"dependencies": {
+		"express": "^4.19.2",
+		"cors": "^2.8.5",
+		"node-fetch": "^3.3.2",
+		"pg": "^8.11.3",
+		"bcryptjs": "2.4.3",
+		"jsonwebtoken": "^9.0.2"
+	},
+	"devDependencies": {
+		"nodemon": "^3.0.0"
+	}
+}
