@@ -16,14 +16,7 @@ import { notFound, errorHandler } from './middleware/errorHandler.js';
 const app = express();
 
 //core middlewrea
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:4200',
-  credentials: true
-}));
-app.use(express.json({ limit: '10kb' }));
-app.use(logging);
-app.use(securityHeaders);
-app.use(rateLimit);
+app.use(cors());
 
 //calc routes(public)
 app.use('/api/bmi', bmiRoutes);
