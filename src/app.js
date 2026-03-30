@@ -17,6 +17,10 @@ const app = express();
 
 //core middlewrea
 app.use(cors());
+app.use(express.json({limit: '10kb' }));
+app.use(logging);
+app.use(securityHeaders);
+app.use(rateLimit);
 
 //calc routes(public)
 app.use('/api/bmi', bmiRoutes);
