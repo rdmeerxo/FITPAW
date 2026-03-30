@@ -192,6 +192,19 @@
   font-size: 13px;
 }
 
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+  }
+
+  .nav-buttons {
+    width: 100%;
+    justify-content: center;
+    padding-top: 8px;
+    padding-bottom: 4px;
+  }
+}
+
 
 @media (max-width: 932px) {
   .navbar {

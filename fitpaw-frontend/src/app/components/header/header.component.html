@@ -17,26 +17,5 @@
       </ng-container>
     </div>
 
-    <button class="hamburger-btn" (click)="toggleMenu()">
-      <i class="bi bi-list"></i>
-    </button>
   </div>
 </nav>
-
-<div class="mobile-menu-overlay" [class.active]="isMenuOpen" (click)="toggleMenu()"></div>
-
-<div class="mobile-menu" [class.active]="isMenuOpen">
-  <button class="close-btn" (click)="toggleMenu()">
-    <i class="bi bi-x-lg"></i>
-  </button>
-  <div class="mobile-nav-buttons">
-    <ng-container *ngIf="!authService.isLoggedIn()">
-      <button class="btn btn-login" routerLink="/login" (click)="toggleMenu()">Login</button>
-      <button class="btn btn-register" routerLink="/register" (click)="toggleMenu()">Register</button>
-    </ng-container>
-    <ng-container *ngIf="authService.isLoggedIn()">
-      <button class="btn btn-dashboard" routerLink="/dashboard" (click)="toggleMenu()">Dashboard</button>
-      <button class="btn btn-logout" (click)="logout(); toggleMenu()">Log out</button>
-    </ng-container>
-  </div>
-</div>
