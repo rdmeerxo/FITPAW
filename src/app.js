@@ -8,6 +8,8 @@ import feedingPlanRoutes from './routes/feedingPlanRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import catsRoutes from './routes/catsRoutes.js';
 import logsRoutes from './routes/logsRoutes.js';
+import savedFoodsRoutes from './routes/savedFoodsRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import { logging } from './middleware/logging.js';
 import { securityHeaders } from './middleware/securityHeaders.js';
 import { rateLimit } from './middleware/rateLimit.js';
@@ -15,30 +17,31 @@ import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
-//core middlewrea
 app.use(cors());
-app.use(express.json({limit: '10kb' }));
+app.use(express.json({ limit: '10kb' }));
 app.use(logging);
 app.use(securityHeaders);
 app.use(rateLimit);
 
-//calc routes(public)
+// public calculator routes
 app.use('/api/bmi', bmiRoutes);
 app.use('/api/calorie', calorieRoutes);
 app.use('/api/age', ageRoutes);
 app.use('/api/food', foodRoutes);
 app.use('/api/feeding-plan', feedingPlanRoutes);
 
-//auth routes(public)
+// auth routes
 app.use('/api/auth', authRoutes);
 
-//protectedroutes
+// protected routes
 app.use('/api/cats', catsRoutes);
 app.use('/api/cats/:catId/logs', logsRoutes);
+app.use('/api/saved-foods', savedFoodsRoutes);
 
-//error handling
+// admin routes
+app.use('/api/admin', adminRoutes);
+
 app.use(notFound);
 app.use(errorHandler);
 
 export default app;
-
