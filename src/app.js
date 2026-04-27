@@ -23,22 +23,22 @@ app.use(logging);
 app.use(securityHeaders);
 app.use(rateLimit);
 
-// public calculator routes
+//public calculator routes
 app.use('/api/bmi', bmiRoutes);
 app.use('/api/calorie', calorieRoutes);
 app.use('/api/age', ageRoutes);
 app.use('/api/food', foodRoutes);
 app.use('/api/feeding-plan', feedingPlanRoutes);
 
-// auth routes
+//auth routes
 app.use('/api/auth', authRoutes);
 
-// protected routes
+//protected routes
 app.use('/api/cats', catsRoutes);
 app.use('/api/cats/:catId/logs', logsRoutes);
 app.use('/api/saved-foods', savedFoodsRoutes);
 
-// admin routes
+//admin routes
 app.use('/api/admin', adminRoutes);
 
 app.use(notFound);

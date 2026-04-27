@@ -3,7 +3,7 @@ import * as catsService from '../services/catsService.js';
 
 export async function getLogs(req, res, next) {
   try {
-    // verify the cat belongs to this user
+    // verifying that the cat belongs to this user
     const cat = await catsService.getCatById(req.params.catId, req.user.id);
     if (!cat) return res.status(404).json({ error: { message: 'Cat not found' } });
 

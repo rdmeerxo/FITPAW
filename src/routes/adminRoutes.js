@@ -23,7 +23,7 @@ router.get('/stats', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// GET /api/admin/users — user list with cats and avg weight
+// GET /api/admin/users — user list with cats and average weight
 router.get('/users', async (req, res, next) => {
   try {
     const result = await pool.query(`

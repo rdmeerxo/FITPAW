@@ -1,4 +1,4 @@
-// Simple in-memory IP rate limiter
+//simple in memory IP rate limiter
 const buckets = new Map();
 const WINDOW_MS = 60_000;
 const MAX_REQUESTS = 60;

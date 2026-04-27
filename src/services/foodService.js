@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Domain-specific error class
+// domain-specific error class
 class DomainError extends Error {
 	constructor(message, status = 500, code = 'ERROR') {
 		super(message);
@@ -19,13 +19,13 @@ class DomainError extends Error {
 const PRODUCT_API_V2_BASE = 'https://world.openfoodfacts.org/api/v2/product';
 const PRODUCT_API_V0_BASE = 'https://world.openfoodfacts.org/api/v0/product';
 
-// Cache
+//cahce
 const cache = new Map();
 const CACHE_TTL_MS = 1000 * 60 * 10;
 const negativeCache = new Map();
 const NEGATIVE_CACHE_TTL_MS = 1000 * 60 * 2;
 
-// Load local cat foods database
+//loading local cat foods database
 let localDatabase = { foods: [] };
 try {
 	const dbPath = path.join(__dirname, '../../data/catfoods.json');
@@ -64,7 +64,7 @@ function inNegativeCache(barcode) {
 	return true;
 }
 
-// Search local database first
+//sarch local database first
 function searchLocalDatabase(barcode) {
 	const food = localDatabase.foods.find(f => f.barcode === barcode);
 	if (food) {
@@ -97,14 +97,14 @@ export async function fetchFoodByBarcode(barcode) {
 	const cached = getCache(barcode);
 	if (cached) return { ...cached, source: 'cache' };
 
-	// CHECK LOCAL DATABASE FIRST
+	//CHECK LOCAL DATABASE FIRST
 	const localFood = searchLocalDatabase(barcode);
 	if (localFood) {
 		setCache(barcode, localFood);
 		return localFood;
 	}
 
-	// Fallback to Open Food Facts API
+	//fallback to Open Food Facts API
 	console.log(`Not in local database, checking Open Food Facts for: ${barcode}`);
 	let json = await fetchProduct(`${PRODUCT_API_V2_BASE}/${barcode}.json`);
 	if (!json && json !== false) {

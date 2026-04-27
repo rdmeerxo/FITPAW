@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import pool from '../db/database.js';
 
 export async function registerUser(username, password) {
-  // Check username already exists
+  // check username if already exists
   const existing = await pool.query(
     'SELECT id FROM users WHERE username = $1', [username]
   );

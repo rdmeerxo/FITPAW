@@ -1,5 +1,5 @@
-// Human age conversion for cats
-// Table assumption: year1=15, year2=+9, subsequent=+4 each
+// human age converter for cats
+// Table assumptionworks like year1=15, year2=+9, subsequent=+4 each
 export function convertCatAge(catAgeYears) {
 	if (catAgeYears <= 0) return { humanAge: 0 };
 	let humanAge;

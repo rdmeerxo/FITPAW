@@ -1,4 +1,6 @@
--- Run this once in Railway's PostgreSQL query editor
+-- already run this file to set up the PostgreSQL database tables and 
+-- tables are created only if they dont alreayd exist. 
+-- keeping this file is jutsr for cdocumentation and recovery purposes.
 
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
@@ -34,9 +36,3 @@ CREATE TABLE IF NOT EXISTS saved_foods (
   barcode VARCHAR(50),
   created_at TIMESTAMP DEFAULT NOW()
 );
-
--- Pre-created test users (password is 'fitpaw123' for both)
-INSERT INTO users (username, password_hash) VALUES
-  ('testuser1', '$2b$10$rJ8QqO1Z5ZQwX8k5Y9mN8.vGxHj1234567890abcdefghijklmnop'),
-  ('testuser2', '$2b$10$rJ8QqO1Z5ZQwX8k5Y9mN8.vGxHj1234567890abcdefghijklmnop')
-ON CONFLICT DO NOTHING;
